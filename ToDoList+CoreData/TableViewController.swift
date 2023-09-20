@@ -36,8 +36,7 @@ class TableViewController: UITableViewController {
     }
     private func saveTask(withTitle title: String){
         
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let context = appDelegate.persistentContainer.viewContext
+        let context = getContext()
         
         guard let entity = NSEntityDescription.entity(forEntityName: "Task", in: context) else { return }
         
@@ -46,12 +45,19 @@ class TableViewController: UITableViewController {
         
         do {
             try context.save()
-            tasks.append(taskObject)
+            
         } catch let error as NSError {
             print(error.localizedDescription)
         }
+    }
+    
+    private func getContext() -> NSManagedObjectContext {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        return appDelegate.persistentContainer.viewContext
+    }
+    override func viewWillAppear(_ animated: Bool) {
         
-        
+        let context = getContext()
     }
     override func viewDidLoad() {
         super.viewDidLoad()
