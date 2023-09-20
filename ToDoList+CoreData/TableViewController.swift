@@ -45,7 +45,7 @@ class TableViewController: UITableViewController {
         
         do {
             try context.save()
-            
+            tasks.insert(taskObject, at: 0)
         } catch let error as NSError {
             print(error.localizedDescription)
         }
@@ -58,15 +58,35 @@ class TableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         let context = getContext()
+        let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        do {
+            tasks = try context.fetch(fetchRequest)
+        } catch let error as NSError {
+            print(error.localizedDescription)
+        }
+        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+//        let context = getContext()
+//        let fetchRequest: NSFetchRequest<Task> = Task.fetchRequest()
+//        if let objects = try? context.fetch(fetchRequest) {
+//            for object in objects {
+//                context.delete(object)
+//            }
+//        }
+//        
+//        do {
+//            try context.save()
+//        } catch let error as NSError {
+//            print(error.localizedDescription)
+//        }
+        
+        
     }
 
     // MARK: - Table view data source
